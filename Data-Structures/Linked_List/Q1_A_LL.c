@@ -87,22 +87,41 @@ int main() {
 
 int insertSortedLL(LinkedList* ll, int item) {
 	ListNode* curr = ll->head;
+	ListNode* prev = NULL;
+
+	ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));
+	newNode->item = item;
+	newNode->next = NULL;
+
 	int idx = 0;
 
-	while (curr != NULL) {
-		if (curr->item == item) return -1;
-
-		if (curr->item > item) {
-			insertNode(ll, idx, item);
-			return idx;
-		}
-
+	// 삽입 위치 찾기
+	while (curr != NULL && curr->item < item) {
+		prev = curr;
 		curr = curr->next;
 		idx++;
 	}
 
-	// 맨 처음 또는 맨 마지막 삽입시
-	insertNode(ll, idx, item);
+	// 맨 앞인 경우
+	if (prev == NULL) {
+		// ListNode newNode = {item, NULL};
+		// ## 지역변수로 선언하면 함수 종료시 사라지므로!!! 반드시 malloc이 필요
+
+		newNode->next = ll->head;
+		ll->head = newNode;
+		return 0;
+	}
+
+	// 이미 있는 경우
+	if (prev->item == item) {
+		free(newNode);	// 불필요하므로 노드 해제
+		return -1;
+	}
+
+	// 그 외 (중간 또는 맨 뒤)
+	newNode->next = curr;
+	prev->next = newNode;
+
 	return idx;
 }
 
