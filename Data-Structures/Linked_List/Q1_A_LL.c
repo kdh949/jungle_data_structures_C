@@ -109,6 +109,7 @@ int insertSortedLL(LinkedList* ll, int item) {
 
 		newNode->next = ll->head;
 		ll->head = newNode;
+		(ll->size)++;
 		return 0;
 	}
 
@@ -121,7 +122,8 @@ int insertSortedLL(LinkedList* ll, int item) {
 	// 그 외 (중간 또는 맨 뒤)
 	newNode->next = curr;
 	prev->next = newNode;
-
+	(ll->size)++;
+	
 	return idx;
 }
 
