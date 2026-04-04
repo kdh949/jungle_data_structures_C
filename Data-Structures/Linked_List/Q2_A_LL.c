@@ -11,43 +11,40 @@ Purpose: Implementing the required functions for Question 2 */
 
 //////////////////////////////////////////////////////////////////////////////////
 
-typedef struct _listnode
-{
+typedef struct _listnode {
 	int item;
-	struct _listnode *next;
-} ListNode;			// You should not change the definition of ListNode
+	struct _listnode* next;
+} ListNode;	 // You should not change the definition of ListNode
 
-typedef struct _linkedlist
-{
+typedef struct _linkedlist {
 	int size;
-	ListNode *head;
-} LinkedList;			// You should not change the definition of LinkedList
+	ListNode* head;
+} LinkedList;  // You should not change the definition of LinkedList
 
-
-//////////////////////// function prototypes /////////////////////////////////////
+//////////////////////// function prototypes
+////////////////////////////////////////
 
 // You should not change the prototype of this function
-void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2);
+void alternateMergeLinkedList(LinkedList* ll1, LinkedList* ll2);
 
-void printList(LinkedList *ll);
-void removeAllItems(LinkedList *ll);
-ListNode *findNode(LinkedList *ll, int index);
-int insertNode(LinkedList *ll, int index, int value);
-int removeNode(LinkedList *ll, int index);
+void printList(LinkedList* ll);
+void removeAllItems(LinkedList* ll);
+ListNode* findNode(LinkedList* ll, int index);
+int insertNode(LinkedList* ll, int index, int value);
+int removeNode(LinkedList* ll, int index);
 
+//////////////////////////// main()
+/////////////////////////////////////////////////
 
-//////////////////////////// main() //////////////////////////////////////////////
-
-int main()
-{
+int main() {
 	LinkedList ll1, ll2;
 	int c, i, j;
 	c = 1;
-	//Initialize the linked list 1 as an empty linked list
+	// Initialize the linked list 1 as an empty linked list
 	ll1.head = NULL;
 	ll1.size = 0;
 
-	//Initialize the linked list 2 as an empty linked list
+	// Initialize the linked list 2 as an empty linked list
 	ll2.head = NULL;
 	ll2.size = 0;
 
@@ -56,44 +53,49 @@ int main()
 	printf("3: Create the alternate merged linked list:\n");
 	printf("0: Quit:\n");
 
-	while (c != 0)
-	{
+	while (c != 0) {
 		printf("Please input your choice(1/2/3/0): ");
 		scanf("%d", &c);
 
-		switch (c)
-		{
-		case 1:
-			printf("Input an integer that you want to add to the linked list 1: ");
-			scanf("%d", &i);
-			j = insertNode(&ll1, ll1.size, i);
-			printf("Linked list 1: ");
-			printList(&ll1);
-			break;
-		case 2:
-			printf("Input an integer that you want to add to the linked list 2: ");
-			scanf("%d", &i);
-			j = insertNode(&ll2, ll2.size, i);
-			printf("Linked list 2: ");
-			printList(&ll2);
-			break;
-		case 3:
-		    printf("The resulting linked lists after merging the given linked list are:\n");
-			alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
-			printf("The resulting linked list 1: ");
-			printList(&ll1);
-			printf("The resulting linked list 2: ");
-			printList(&ll2);
-			removeAllItems(&ll1);
-			removeAllItems(&ll2);
-			break;
-		case 0:
-			removeAllItems(&ll1);
-			removeAllItems(&ll2);
-			break;
-		default:
-			printf("Choice unknown;\n");
-			break;
+		switch (c) {
+			case 1:
+				printf(
+					"Input an integer that you want to add to the linked list "
+					"1: ");
+				scanf("%d", &i);
+				j = insertNode(&ll1, ll1.size, i);
+				printf("Linked list 1: ");
+				printList(&ll1);
+				break;
+			case 2:
+				printf(
+					"Input an integer that you want to add to the linked list "
+					"2: ");
+				scanf("%d", &i);
+				j = insertNode(&ll2, ll2.size, i);
+				printf("Linked list 2: ");
+				printList(&ll2);
+				break;
+			case 3:
+				printf(
+					"The resulting linked lists after merging the given linked "
+					"list are:\n");
+				alternateMergeLinkedList(
+					&ll1, &ll2);  // You need to code this function
+				printf("The resulting linked list 1: ");
+				printList(&ll1);
+				printf("The resulting linked list 2: ");
+				printList(&ll2);
+				removeAllItems(&ll1);
+				removeAllItems(&ll2);
+				break;
+			case 0:
+				removeAllItems(&ll1);
+				removeAllItems(&ll2);
+				break;
+			default:
+				printf("Choice unknown;\n");
+				break;
 		}
 	}
 	return 0;
@@ -101,37 +103,54 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
-{
-    /* add your code here */
+void alternateMergeLinkedList(LinkedList* ll1, LinkedList* ll2) {
+	if (ll1 == NULL || ll2 == NULL) {
+		// printf("empty\n");
+		return;
+	}
+
+	ListNode* ll1_curr = ll1->head;
+	ListNode* ll2_curr = ll2->head;
+
+	ListNode* ll1_next = NULL;
+	ListNode* ll2_next = NULL;
+
+	while (ll1_curr != NULL && ll2_curr != NULL) {
+		ll1_next = ll1_curr->next;
+		ll2_next = ll2_curr->next;
+		ll1_curr->next = ll2_curr;
+		ll2_curr->next = ll1_next;
+
+		ll1_curr = ll1_next;
+		ll2_curr = ll2_next;
+
+		ll1->size++;
+		ll2->size--;
+	}
+
+	ll2->head = ll2_next;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-void printList(LinkedList *ll){
-
-	ListNode *cur;
-	if (ll == NULL)
-		return;
+void printList(LinkedList* ll) {
+	ListNode* cur;
+	if (ll == NULL) return;
 	cur = ll->head;
 
-	if (cur == NULL)
-		printf("Empty");
-	while (cur != NULL)
-	{
+	if (cur == NULL) printf("Empty");
+	while (cur != NULL) {
 		printf("%d ", cur->item);
 		cur = cur->next;
 	}
 	printf("\n");
 }
 
+void removeAllItems(LinkedList* ll) {
+	ListNode* cur = ll->head;
+	ListNode* tmp;
 
-void removeAllItems(LinkedList *ll)
-{
-	ListNode *cur = ll->head;
-	ListNode *tmp;
-
-	while (cur != NULL){
+	while (cur != NULL) {
 		tmp = cur->next;
 		free(cur);
 		cur = tmp;
@@ -140,38 +159,31 @@ void removeAllItems(LinkedList *ll)
 	ll->size = 0;
 }
 
+ListNode* findNode(LinkedList* ll, int index) {
+	ListNode* temp;
 
-ListNode *findNode(LinkedList *ll, int index){
-
-	ListNode *temp;
-
-	if (ll == NULL || index < 0 || index >= ll->size)
-		return NULL;
+	if (ll == NULL || index < 0 || index >= ll->size) return NULL;
 
 	temp = ll->head;
 
-	if (temp == NULL || index < 0)
-		return NULL;
+	if (temp == NULL || index < 0) return NULL;
 
-	while (index > 0){
+	while (index > 0) {
 		temp = temp->next;
-		if (temp == NULL)
-			return NULL;
+		if (temp == NULL) return NULL;
 		index--;
 	}
 
 	return temp;
 }
 
-int insertNode(LinkedList *ll, int index, int value){
-
+int insertNode(LinkedList* ll, int index, int value) {
 	ListNode *pre, *cur;
 
-	if (ll == NULL || index < 0 || index > ll->size + 1)
-		return -1;
+	if (ll == NULL || index < 0 || index > ll->size + 1) return -1;
 
 	// If empty list or inserting first node, need to update head pointer
-	if (ll->head == NULL || index == 0){
+	if (ll->head == NULL || index == 0) {
 		cur = ll->head;
 		ll->head = malloc(sizeof(ListNode));
 		ll->head->item = value;
@@ -180,10 +192,9 @@ int insertNode(LinkedList *ll, int index, int value){
 		return 0;
 	}
 
-
 	// Find the nodes before and at the target position
 	// Create a new node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
+	if ((pre = findNode(ll, index - 1)) != NULL) {
 		cur = pre->next;
 		pre->next = malloc(sizeof(ListNode));
 		pre->next->item = value;
@@ -195,17 +206,14 @@ int insertNode(LinkedList *ll, int index, int value){
 	return -1;
 }
 
-
-int removeNode(LinkedList *ll, int index){
-
+int removeNode(LinkedList* ll, int index) {
 	ListNode *pre, *cur;
 
 	// Highest index we can remove is size-1
-	if (ll == NULL || index < 0 || index >= ll->size)
-		return -1;
+	if (ll == NULL || index < 0 || index >= ll->size) return -1;
 
 	// If removing first node, need to update head pointer
-	if (index == 0){
+	if (index == 0) {
 		cur = ll->head->next;
 		free(ll->head);
 		ll->head = cur;
@@ -216,10 +224,8 @@ int removeNode(LinkedList *ll, int index){
 
 	// Find the nodes before and after the target position
 	// Free the target node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
-
-		if (pre->next == NULL)
-			return -1;
+	if ((pre = findNode(ll, index - 1)) != NULL) {
+		if (pre->next == NULL) return -1;
 
 		cur = pre->next;
 		pre->next = cur->next;
