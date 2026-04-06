@@ -85,9 +85,26 @@ int main()
 
 ////////////////////////////////////////////////////////////////////////
 
-void RecursiveReverse(ListNode **ptrHead)
-{
-	/* add your code here */
+void RecursiveReverse(ListNode** ptrHead) {
+	if (ptrHead == NULL) return -1;	 // 이중 포인터 ptrHead 자체가 넘어오지 않음
+	if (*ptrHead == NULL) return -1;	// 이중 포인터 ptrHead 내부의 값이 NULL (리스트가 없음)
+
+	ListNode* head = *ptrHead;
+
+	ListNode* prev = NULL;
+	ListNode* curr = head;
+	ListNode* nxt = NULL;
+
+	while (curr != NULL) {
+		nxt = curr->next;
+
+		curr->next = prev;
+
+		prev = curr;
+		curr = nxt;
+	}
+	
+	*ptrHead = prev;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
