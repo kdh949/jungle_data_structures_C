@@ -105,7 +105,6 @@ int main() {
 
 void alternateMergeLinkedList(LinkedList* ll1, LinkedList* ll2) {
 	if (ll1 == NULL || ll2 == NULL) {
-		// printf("empty\n");
 		return;
 	}
 
@@ -118,6 +117,7 @@ void alternateMergeLinkedList(LinkedList* ll1, LinkedList* ll2) {
 	while (ll1_curr != NULL && ll2_curr != NULL) {
 		ll1_next = ll1_curr->next;
 		ll2_next = ll2_curr->next;
+		
 		ll1_curr->next = ll2_curr;
 		ll2_curr->next = ll1_next;
 
