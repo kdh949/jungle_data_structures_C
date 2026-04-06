@@ -84,11 +84,52 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void moveOddItemsToBack(LinkedList *ll)
-{
-	/* add your code here */
-}
+void moveOddItemsToBack(LinkedList* ll) {
+	if (ll == NULL) {
+		return;
+	}
 
+	ListNode* even_head = NULL;
+	ListNode* odd_head = NULL;
+
+	ListNode* even_curr = NULL;
+	ListNode* odd_curr = NULL;
+
+	ListNode* curr = ll->head;
+	ListNode* prev = NULL;
+
+	while (curr != NULL) {
+		prev = curr;
+		curr = prev->next;
+
+		prev->next=NULL;
+
+		if (prev->item % 2 == 0) {
+			if (even_head == NULL) {
+				even_head = prev;
+				even_curr = even_head;
+			} else {
+				even_curr->next = prev;
+				even_curr = even_curr->next;
+			}
+		} else {
+			if (odd_head == NULL) {
+				odd_head = prev;
+				odd_curr = odd_head;
+			} else {
+				odd_curr->next = prev;
+				odd_curr = odd_curr->next;
+			}
+		}
+	}
+
+	if (even_head == NULL) {
+		ll->head = odd_head;
+	} else {
+		even_curr->next = odd_head;
+		ll->head = even_head;
+	}
+}
 ///////////////////////////////////////////////////////////////////////////////////
 
 void printList(LinkedList *ll){
