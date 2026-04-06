@@ -86,25 +86,42 @@ int main()
 ////////////////////////////////////////////////////////////////////////
 
 void RecursiveReverse(ListNode** ptrHead) {
-	if (ptrHead == NULL) return -1;	 // 이중 포인터 ptrHead 자체가 넘어오지 않음
-	if (*ptrHead == NULL) return -1;	// 이중 포인터 ptrHead 내부의 값이 NULL (리스트가 없음)
-
-	ListNode* head = *ptrHead;
-
-	ListNode* prev = NULL;
-	ListNode* curr = head;
-	ListNode* nxt = NULL;
-
-	while (curr != NULL) {
-		nxt = curr->next;
-
-		curr->next = prev;
-
-		prev = curr;
-		curr = nxt;
+	// 1. Base Case
+    // 포인터가 잘못되었거나, 리스트가 비어있거나, 노드가 1개뿐이라면 더 이상 뒤집을 필요가 없으므로 종료
+	if (ptrHead == NULL || *ptrHead == NULL || (*ptrHead)->next == NULL) {
+		return;
 	}
-	
-	*ptrHead = prev;
+
+	//2. 재귀 호출
+
+	// 예시: (*ptrHead): [3] -> [2] -> [1] -> NULL
+	// fisrt: [3]
+	// rest: [2] -> [1] -> NULL
+	ListNode *first = *ptrHead; // 현재 리스트의 첫 번째 노드
+	ListNode *rest = first->next; // first를 제외한 나머지 부분 (리스트)
+
+	// 나머지 리스트(&rest)를 재귀적으로 호출
+	RecursiveReverse(&rest);
+
+	//3. Reverse
+	// 다음 노드(first->next)의 next를 first(현재 노드)로 향하게 함
+	/*
+	before: [1] -> [2] -> NULL
+	after: [1] <-> [2]
+	*/
+	first->next->next = first;
+
+	// 원래 첫 번째였던 노드는 이제 맨 마지막 꼬리가 되어야 하므로 NULL을 가리킴
+	/*
+	before: [1] <-> [2]
+	after: [1] <- [2]
+			ㄴ> NULL
+	*/
+    first->next = NULL;
+
+	// 4. 헤드 업데이트
+    // 완전히 뒤집힌 리스트의 새로운 시작점(rest)을 포인터에 저장
+    *ptrHead = rest;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
