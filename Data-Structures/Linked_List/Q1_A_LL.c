@@ -86,10 +86,10 @@ int main() {
 //////////////////////////////////////////////////////////////////////////////////
 
 int insertSortedLL(LinkedList* ll, int item) {
-	ListNode* curr = ll->head;
+	ListNode* curr = ll->head; //heap에 생성 (지역/매개 변수)
 	ListNode* prev = NULL;
 
-	ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));
+	ListNode* newNode = (ListNode*)malloc(sizeof(ListNode)); //stack에 생성 (사용자의 동적 할당)
 	newNode->item = item;
 	newNode->next = NULL;
 
@@ -123,7 +123,7 @@ int insertSortedLL(LinkedList* ll, int item) {
 	newNode->next = curr;
 	prev->next = newNode;
 	(ll->size)++;
-	
+
 	return idx;
 }
 
