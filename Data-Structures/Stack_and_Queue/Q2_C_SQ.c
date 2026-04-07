@@ -111,14 +111,44 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void createStackFromLinkedList(LinkedList *ll, Stack *s)
-{
-    /* add your code here */
+void createStackFromLinkedList(LinkedList* ll, Stack* s) {
+	if(!isEmptyStack(s)){
+		removeAllItemsFromStack(s);
+	}
+
+	ListNode* curr = ll->head;
+	int item;
+
+	while (curr != NULL) {
+		item = curr->item;
+		push(s, item);
+		curr = curr->next;
+	}
 }
 
-void removeEvenValues(Stack *s)
-{
-	/* add your code here */
+void removeEvenValues(Stack* s) {
+	if(s == NULL || s->ll.head == NULL){ // s->ll == NULL은 변수를 검사하는 것이므로 불가!
+		return;
+	}
+
+	Stack tmp_stack;
+	tmp_stack.ll.head = NULL;
+	tmp_stack.ll.size = 0;
+
+	int stack_size = s->ll.size;
+	int item;
+
+	for (int i = 0; i < stack_size; i++) {
+		item = pop(s);
+
+		if (item % 2 != 0) {
+			push(&tmp_stack, item);
+		}
+	}
+
+	while (!isEmptyStack(&tmp_stack)) {
+		push(s, pop(&tmp_stack)); // 미리 pop 하지 않고 루프 안에서 바로 처리
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
