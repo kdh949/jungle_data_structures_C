@@ -114,14 +114,46 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void createQueueFromLinkedList(LinkedList *ll, Queue *q)
-{
-	/* add your code here */
+void createQueueFromLinkedList(LinkedList* ll, Queue* q) {
+	if (ll == NULL || ll->head == NULL || q == NULL) {
+		return;
+	}
+
+	if (!isEmptyQueue(q)) {
+		removeAllItemsFromQueue(q);
+	}
+
+	ListNode* curr_ll = ll->head;
+	ListNode* curr_q = NULL;
+
+	q->ll.head = (ListNode*)malloc(sizeof(ListNode));
+
+	curr_q = q->ll.head;
+	curr_q->item = curr_ll->item;
+	curr_q->next = NULL;
+	q->ll.size = 1;
+	curr_ll = curr_ll->next;
+
+	while (curr_ll != NULL) {
+		curr_q->next = (ListNode*)malloc(sizeof(ListNode));
+		curr_q = curr_q->next;
+
+		curr_q->item = curr_ll->item;
+		curr_ll = curr_ll->next;
+		q->ll.size++;
+	}
 }
 
-void removeOddValues(Queue *q)
-{
-	/* add your code here */
+void removeOddValues(Queue* q) {
+	int size = q->ll.size;
+
+	for (int i = 0; i < size; i++) {
+		int val = dequeue(q);
+
+		if (val % 2 == 0) {
+			enqueue(q, val);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
